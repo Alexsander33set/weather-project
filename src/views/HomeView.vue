@@ -192,19 +192,19 @@ export default {
       </div>
       <div class="mainTemperature">
         <div class="averageTemp">
-          {{ (this.bruteWeatherData.main.temp - 273.15).toFixed(0) }} ºC
+          {{ (this.bruteWeatherData.main.temp - 273.15).toFixed() }} ºC
         </div>
         <div class="maxMinTemp">
           <div class="maxTemp">
             <i>↑</i>
             <p>
-              {{ (this.bruteWeatherData.main.temp_max - 273.15).toFixed(2) }} ºC
+              {{ (this.bruteWeatherData.main.temp_max - 273.15).toFixed() }}º
             </p>
           </div>
           <div class="minTemp">
             <i>↓</i>
             <p>
-              {{ (this.bruteWeatherData.main.temp_min - 273.15).toFixed(2) }} ºC
+              {{ (this.bruteWeatherData.main.temp_min - 273.15).toFixed() }}º
             </p>
           </div>
         </div>
@@ -216,7 +216,7 @@ export default {
         <article class="card grid2">
           <h6>Sensaçào Térmica</h6>
           <p>
-            {{ (this.bruteWeatherData.main.feels_like - 273.15).toFixed(2) }} ºC
+            {{ (this.bruteWeatherData.main.feels_like - 273.15).toFixed() }}
           </p>
         </article>
         <article class="card">
