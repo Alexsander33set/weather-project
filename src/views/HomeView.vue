@@ -4,7 +4,8 @@ export default {
   name: "WeatherHome",
   data() {
     return {
-      userWeatherPreferences: { metricUnit: "" },
+      pageTitle: document.title,
+      userPreferences: { language: "", metricUnit: "" },
       bruteWeatherData: {
         coord: {
           lon: 10.99,
@@ -66,6 +67,7 @@ export default {
   },
   created() {
     this.getGeolocatization();
+    this.pageTitle = "hehe";
   },
   methods: {
     anything(wantSee) {
@@ -143,13 +145,18 @@ export default {
 </script>
 <template>
   <div class="mainBody">
-    <div class="navbar">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
     <main class="mainContainer" v-if="true">
+      <div class="navbar">
+        <nav>
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+        </nav>
+        <select name="" id="" disabled="disabled" placeholder="Estado">
+          <option value="SP">Sampa</option>
+          <option value="RJ">Rio de Fevereiro</option>
+        </select>
+        <input type="text" name="" placeholder="Cidade...">
+      </div>
       <div class="updatedIn" @click="getWeather()">
         Atualizado em 0m <img src="../assets/icons/update.svg" height="12" />
       </div>
@@ -246,11 +253,20 @@ export default {
 /*----- Main -----*/
 
 .mainBody {
-  background: #e5ecf4;
+  background: linear-gradient(
+    0deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(9, 9, 121, 1) 35%,
+    rgba(0, 212, 255, 1) 100%
+  );
 }
 .mainContainer {
   margin: 0 48px;
   text-align: center;
+}
+.mainContainer > div {
+  background: rgba(255, 255, 255, 0.521);
+  border-radius: 8px;
 }
 .updatedIn {
   text-align: end;
@@ -355,8 +371,7 @@ export default {
 @media (min-width: 1239px) {
   .mainContainer {
     margin: 0 200px;
-    background: #e5ecf4;
-    min-height: 100dvh;
+    min-height: 97.9vh;
   }
   /*    <div class="loading"><span class="point point1"></span><span class="point point2"></span></div>  */
   .loading {

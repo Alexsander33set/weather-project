@@ -11,12 +11,6 @@
   box-sizing: border-box;
   outline: transparent;
 }
-html,
-body,
-.mainBody {
-  min-width: 100dvw;
-  min-height: 100dvh;
-}
 
 #app {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;

@@ -1,74 +1,78 @@
 <p align="center">
-    <img src="./logo.png" width="175"> 
+    <img src="public/favicon.ico" width="175">
 </p>
-<h1 align="center">Meu Portfolio</h1>
+<h1 align="center">Weather Project</h1>
 <description>
-Projeto em desenvolvimento, porém não contínuo, passará por diversas alterações.<br>
-<a href="https://www.figma.com/file/tBHrIuL4AcTC30Sxudh5kj/Portif%C3%B3lio?node-id=0%3A1&t=bBRpQMlEbnAVWRRh-1">Design</a>  
+> Projeto em desenvolvimento, porém não contínuo, passará por diversas alterações. 
 
+<br>
 
 </description>
 <p style="color:#404040;" align="end">Release 0</p>
-<hr>
+<hr\>
 
 # Sumário
 
+- [Design](#design)
 - [Comandos](#install)
-    - [Install](#install)
-    - [build](#build)
+  - [Install](#install)
+  - [build](#build)
 - [Tecnologias utilizadas](#tecnologias)
   <!-- [License](#license) -->
 
 <hr>
+<div id="design"\>
 
-#### App Design - [Figma](https://www.figma.com/file/tBHrIuL4AcTC30Sxudh5kj/Portif%C3%B3lio?node-id=0%3A1&t=H7e14Qccoad6Sjg8-1)
-#### App architecture - [Lucidchart](https://lucid.app/lucidchart/fde5b0dc-29ae-4c47-bd7c-64e211760cb7/edit?viewport_loc=-143%2C-212%2C2219%2C1055%2C0_0&invitationId=inv_571a1975-17aa-4fc7-8a3a-831a045beee6)
-<Hr>
-<div id="install"></div>
+
+## Design
+
+O Design desta aplicação está sendo feita em parceria com Gustavo Castro ( [Linkedin](https://www.linkedin.com/in/gustavo-de-castro-lazzaretti-porto-3307b2240/) ) através da plataforma [Figma](https://www.figma.com/)
+
+
+Link → [Design da aplicação](https://www.figma.com/file/tBHrIuL4AcTC30Sxudh5kj/Portif%C3%B3lio?node-id=0%3A1&t=H7e14Qccoad6Sjg8-1)
+
+<hr>
+
+<div id="install"\>
 
 # Comandos
 
 To run the application:
 
 ```node
-    npm install
-    npm run serve
+npm i
+npm run dev
 ```
-<div id="build"></div>
 
-### Compiles and minifies for production
-```
+<div id="build"\>
+
+## Compiles and minifies for production
+
+```node
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-<hr>
-
-### Feedbacks
+# Feedbacks
 
 Quanto mais comentários, melhor! Estamos sempre à procura de mais sugestões e opiniões sobre as discussões. Essa é uma boa oportunidade para influenciar a direção futura deste projeto.
 
 Isso inclui enviar uma sugestão, incluindo recursos completamente novos e pequenas melhorias nas funcionalidades existentes.
 
-rótulos são um bom lugar para encontrar discussões em andamento.
-
 ---
+<div id="tecnologias"\>
 
-### 🛠 Tecnologias
+# 🛠 Tecnologias
 
-<div id="tecnologias"></div>
 As seguintes ferramentas foram usadas na construção do projeto:
-<br><br>
+<br>
 
 - [Node](https://nodejs.org/en/)
   - [Vue](https://vuejs.org/)
-    - [Axios](https://axios-http.com/ptbr/docs/intro)
+  - [Vite](https://vitejs.dev/)
+  - [Axios](https://axios-http.com/ptbr/docs/intro)
+  - [Sass](https://sass-lang.com/)
+- [OpenWeather API](https://openweathermap.org/)
 
-
-### Credits
+# Creditos
 
 -[ISO 3166 country codes](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes)
