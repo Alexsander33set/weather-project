@@ -10,7 +10,7 @@ const router = createRouter({
       component: HomeView,
       meta: {
         title: "Weather Forecast",
-      }
+      },
     },
     {
       path: "/about",

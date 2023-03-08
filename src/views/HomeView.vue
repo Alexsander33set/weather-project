@@ -1,7 +1,10 @@
 <script>
 import axios from "axios";
+import SimpleInput from "./../components/simpleInput.vue";
+
 export default {
   name: "WeatherHome",
+  components: { SimpleInput },
   data() {
     return {
       pageTitle: document.title,
@@ -55,43 +58,56 @@ export default {
         name: "Zocca",
         cod: 200,
       },
-      userInputs: { city: "", stateCode: "", countryCode: "" },
-      limit: 1,
-      lat: "",
-      lon: "",
+      userInputs: {
+        city: "",
+        cityValid: true,
+        stateCode: "",
+        countryCode: "",
+      },
+      geolocation: {
+        getGeoSucess: undefined,
+        lat: undefined,
+        lon: undefined,
+        city: "",
+        state: "",
+        fullName: "",
+      },
       geoCity: "",
       geocityLocation: "",
-      timestamp: "",
       editCity: false,
+      // eslint-disable-next-line no-control-regex
+      regex: new RegExp("^[0-9a-zA-Z\b]+$"),
     };
   },
   created() {
+    this.pageTitle = "Weather Forecast";
     this.getGeolocatization();
-    this.pageTitle = "hehe";
+    console.log("getGeoSucess: " + Boolean(this.geolocation.getGeoSucess));
   },
   methods: {
-    anything(wantSee) {
-      console.log(wantSee);
-    },
     getGeolocatization() {
       let successCallback = (position) => {
-        console.log(position);
-        this.lat = position.coords.latitude.toFixed(2);
-        this.lon = position.coords.longitude.toFixed(2);
-        this.timestamp = new Date(position.timestamp);
+        this.geolocation.lat = position.coords.latitude;
+        this.geolocation.lon = position.coords.longitude;
+        this.geolocation.getGeoSucess = true;
       };
       let errorCallback = (error) => {
-        console.log(error);
+        this.geolocation.getGeoSucess = false;
+        console.error(error);
       };
       navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
     },
     getWeather() {
+      if (!this.lat == Number || !this.lon == Number) {
+        console.log("Erro! Não conseguimos acessar sua localização");
+        return "";
+      }
       axios
         .get(
           "https://api.openweathermap.org/data/2.5/weather?lat=" +
-            this.lat +
+            this.geolocation.lat +
             "&lon=" +
-            this.lon +
+            this.geolocation.lon +
             "&appid=" +
             import.meta.env.VITE_API_KEY
         )
@@ -101,44 +117,22 @@ export default {
           console.log(this.bruteWeatherData);
         });
     },
-    getCity() {
-      axios
-        .get(
-          "http://api.openweathermap.org/geo/1.0/reverse?lat=" +
-            this.lat +
-            "&lon=" +
-            this.lon +
-            "&limit=1&appid=" +
-            import.meta.env.VITE_API_KEY
-        )
-        .then((response) => {
-          console.log(response.data);
-          this.geoCity = response.data;
-          this.geocityLocation =
-            response.data.name + ", " + response.data.state;
-        });
-    },
-    temperatureConverting(converting, temperature = Number) {
-      converting;
-      if (!temperature) {
-        return;
+    getWeatherByCity() {
+      if (!this.userInputs.city == "" || undefined) {
+        axios
+          .get(
+            "https://api.openweathermap.org/data/2.5/weather?q=" +
+              this.userInputs.city +
+              "&appid=" +
+              import.meta.env.VITE_API_KEY
+          )
+          .then((response) => {
+            console.log(response.data);
+            this.bruteWeatherData = response.data;
+            console.log(this.bruteWeatherData);
+            this.editCity = false;
+          });
       }
-      converting == "kelvin2ceusius" ? temperature - 272 : "";
-    },
-    getGeolocatizationByCity() {
-      axios
-        .get(
-          "https://api.openweathermap.org/data/2.5/weather?q=" +
-            this.userInputs.city +
-            "&appid=" +
-            import.meta.env.VITE_API_KEY
-        )
-        .then((response) => {
-          console.log(response.data);
-          this.bruteWeatherData = response.data;
-          console.log(this.bruteWeatherData);
-          this.editCity = false;
-        });
     },
   },
 };
@@ -155,7 +149,7 @@ export default {
           <option value="SP">Sampa</option>
           <option value="RJ">Rio de Fevereiro</option>
         </select>
-        <input type="text" name="" placeholder="Cidade...">
+        <input type="text" placeholder="Cidade..." pattern="^[a-zA-Z0-9]+$" />
       </div>
       <div class="updatedIn" @click="getWeather()">
         Atualizado em 0m <img src="../assets/icons/update.svg" height="12" />
@@ -184,12 +178,10 @@ export default {
           />
         </template>
         <template v-else>
-          <input
-            type="text"
-            v-model="this.userInputs.city"
+          <SimpleInput
             placeholder="Cidade"
-            @keypress.enter="getGeolocatizationByCity()"
-          />
+            v-model="this.userInputs.city"
+          ></SimpleInput>
           {{ " " }}
           <img
             @click="this.editCity = !this.editCity"
@@ -259,6 +251,7 @@ export default {
     rgba(9, 9, 121, 1) 35%,
     rgba(0, 212, 255, 1) 100%
   );
+  min-height: 120vh;
 }
 .mainContainer {
   margin: 0 48px;
