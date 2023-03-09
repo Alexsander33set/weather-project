@@ -7,8 +7,7 @@ export default {
   components: { SimpleInput },
   data() {
     return {
-      pageTitle: document.title,
-      userPreferences: { language: "", metricUnit: "" },
+      preferences: { language: "", metricUnit: "" },
       bruteWeatherData: {
         coord: {
           lon: 10.99,
@@ -58,16 +57,16 @@ export default {
         name: "Zocca",
         cod: 200,
       },
-      userInputs: {
+      inputs: {
         city: "",
         cityValid: true,
         stateCode: "",
         countryCode: "",
       },
       geolocation: {
-        getGeoSucess: undefined,
         lat: undefined,
         lon: undefined,
+        result: undefined,
         city: "",
         state: "",
         fullName: "",
@@ -80,27 +79,34 @@ export default {
     };
   },
   created() {
-    this.pageTitle = "Weather Forecast";
+    /* -----  Change Page Title -----*/
+    document.title = "Previsão do Tempo";
+    /* -----  Get Location by navigator -----*/
     this.getGeolocatization();
-    console.log("getGeoSucess: " + Boolean(this.geolocation.getGeoSucess));
+    /* -----  get last Weather Forecast request -----*/
+    if (localStorage.getItem("weatherForecast")) {
+      this.bruteWeatherData = JSON.parse(
+        localStorage.getItem("weatherForecast")
+      );
+    }
   },
   methods: {
     getGeolocatization() {
-      let successCallback = (position) => {
-        this.geolocation.lat = position.coords.latitude;
-        this.geolocation.lon = position.coords.longitude;
-        this.geolocation.getGeoSucess = true;
+      let successCallback = (result) => {
+        this.geolocation.lat = result.coords.latitude;
+        this.geolocation.lon = result.coords.longitude;
+        this.geolocation.result = true;
       };
-      let errorCallback = (error) => {
-        this.geolocation.getGeoSucess = false;
-        console.error(error);
+      let errorCallback = (result) => {
+        console.log(result.message);
       };
       navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
     },
     getWeather() {
-      if (!this.lat == Number || !this.lon == Number) {
-        console.log("Erro! Não conseguimos acessar sua localização");
-        return "";
+      if (!this.geolocation.result) {
+        console.log("não concedido");
+        /*Adicionar Alerta via component general*/
+        return;
       }
       axios
         .get(
@@ -114,15 +120,20 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.bruteWeatherData = response.data;
-          console.log(this.bruteWeatherData);
+          if (response.data.cod == 200) {
+            localStorage.setItem(
+              "weatherForecast",
+              JSON.stringify(this.bruteWeatherData)
+            );
+          }
         });
     },
     getWeatherByCity() {
-      if (!this.userInputs.city == "" || undefined) {
+      if (!this.inputs.city == "" || undefined) {
         axios
           .get(
             "https://api.openweathermap.org/data/2.5/weather?q=" +
-              this.userInputs.city +
+              this.inputs.city +
               "&appid=" +
               import.meta.env.VITE_API_KEY
           )
@@ -180,7 +191,7 @@ export default {
         <template v-else>
           <SimpleInput
             placeholder="Cidade"
-            v-model="this.userInputs.city"
+            v-model="this.inputs.city"
           ></SimpleInput>
           {{ " " }}
           <img
