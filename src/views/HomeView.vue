@@ -90,7 +90,35 @@ export default {
       );
     }
   },
+
   methods: {
+    updateTime() {
+      // return new Date(this.bruteWeatherData.dt);
+      var msPerMinute = 60;
+      var msPerHour = msPerMinute * 60;
+      var msPerDay = msPerHour * 24;
+      var msPerMonth = msPerDay * 30;
+      var msPerYear = msPerDay * 365;
+      console.log("atrász: " + (new Date().getTime() / 1000).toFixed(0));
+      console.log("No Request: " + this.bruteWeatherData.dt);
+      var elapsed = (
+        new Date().getTime() / 1000 -
+        this.bruteWeatherData.dt
+      ).toFixed(0);
+      console.log(elapsed);
+
+      if (elapsed < msPerHour) {
+        return Math.round(elapsed / msPerMinute) + " minutos atrás";
+      } else if (elapsed < msPerDay) {
+        return Math.round(elapsed / msPerHour) + " hours atrás";
+      } else if (elapsed < msPerMonth) {
+        return Math.round(elapsed / msPerDay) + " dias atrás";
+      } else if (elapsed < msPerYear) {
+        return Math.round(elapsed / msPerMonth) + " meses atrás";
+      } else {
+        return Math.round(elapsed / msPerYear) + " anos atrás";
+      }
+    },
     getGeolocatization() {
       let successCallback = (result) => {
         this.geolocation.lat = result.coords.latitude;
@@ -110,7 +138,7 @@ export default {
       }
       axios
         .get(
-          "https://api.openweathermap.org/data/2.5/weather?lat=" +
+          "https://api.openweathermap.org/data/2.5/weather?lang=pt_br&lat=" +
             this.geolocation.lat +
             "&lon=" +
             this.geolocation.lon +
@@ -150,22 +178,23 @@ export default {
 </script>
 <template>
   <div class="mainBody">
+    <div class="navbar" role="navigator">
+      <nav>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/about">About</RouterLink>
+      </nav>
+      <select name="" id="" disabled="disabled" placeholder="Estado">
+        <option value="SP">Sampa</option>
+        <option value="RJ">Rio de Fevereiro</option>
+      </select>
+      <input type="text" placeholder="Cidade..." pattern="^[a-zA-Z0-9]+$" />
+    </div>
     <main class="mainContainer" v-if="true">
-      <div class="navbar">
-        <nav>
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/about">About</RouterLink>
-        </nav>
-        <select name="" id="" disabled="disabled" placeholder="Estado">
-          <option value="SP">Sampa</option>
-          <option value="RJ">Rio de Fevereiro</option>
-        </select>
-        <input type="text" placeholder="Cidade..." pattern="^[a-zA-Z0-9]+$" />
-      </div>
-      <div class="updatedIn" @click="getWeather()">
-        Atualizado em 0m <img src="../assets/icons/update.svg" height="12" />
-      </div>
       <div class="weatherIcon">
+        <div class="updatedIn" @click="getWeather()">
+          Atualizado a {{ updateTime() }}
+          <img src="../assets/icons/update.svg" />
+        </div>
         <img
           :src="
             'http://openweathermap.org/img/wn/' +
@@ -268,19 +297,29 @@ export default {
   margin: 0 48px;
   text-align: center;
 }
-.mainContainer > div {
+.mainContainer{
   background: rgba(255, 255, 255, 0.521);
+  backdrop-filter: blur(10px);
   border-radius: 8px;
+  box-shadow: 0 0 10px -5px gray;
 }
 .updatedIn {
-  text-align: end;
-  margin: 24px 0 -12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 24px;
   cursor: pointer;
+  color: #484848;
+  margin: 8px;
+  gap: 6px;
+}
+.updatedIn img {
+  height: 12px;
 }
 .updatedIn:hover img {
   animation: boom 1s;
 }
-.weatherIcon img {
+.weatherIcon img:nth-child(2) {
   height: 200px;
   filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.15));
 }
@@ -338,6 +377,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
   gap: 12px;
+  padding: 12px;
 }
 .card {
   background: white;
@@ -375,7 +415,6 @@ export default {
 @media (min-width: 1239px) {
   .mainContainer {
     margin: 0 200px;
-    min-height: 97.9vh;
   }
   /*    <div class="loading"><span class="point point1"></span><span class="point point2"></span></div>  */
   .loading {
