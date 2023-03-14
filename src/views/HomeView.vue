@@ -74,8 +74,7 @@ export default {
       geoCity: "",
       geocityLocation: "",
       editCity: false,
-      // eslint-disable-next-line no-control-regex
-      regex: new RegExp("^[0-9a-zA-Z\b]+$"),
+      value: "message from dad",
     };
   },
   created() {
@@ -218,11 +217,7 @@ export default {
           />
         </template>
         <template v-else>
-          <SimpleInput
-            placeholder="Cidade"
-            v-model="this.inputs.city"
-          ></SimpleInput>
-          {{ " " }}
+          <SimpleInput type="text" placeholder="Cidade..." v-model="value" />
           <img
             @click="this.editCity = !this.editCity"
             src="../assets/icons/procurar.svg"
@@ -297,7 +292,7 @@ export default {
   margin: 0 48px;
   text-align: center;
 }
-.mainContainer{
+.mainContainer {
   background: rgba(255, 255, 255, 0.521);
   backdrop-filter: blur(10px);
   border-radius: 8px;
